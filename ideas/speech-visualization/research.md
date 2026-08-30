@@ -260,6 +260,43 @@ tags** (the adoption, in the wrong modality). Nobody occupies the intersection.
 - **The bar for "it works"**: a stranger, given only the score of a famous speech, delivers
   its cadence recognizably — Steele's 1775 goal, finally with a playback device.
 
+## 10. Addendum: the expressive-reader landscape
+
+Added 2026-08-30, after extending the idea to a "prosody engine" that reads any text aloud
+with planned, principle-driven delivery (see README). What exists today:
+
+- **Expressive AI readers already ship, at scale.** ElevenLabs'
+  [ElevenReader](https://elevenreader.io/) reads articles, PDFs, ePubs and web pages with
+  "emotionally rich, context-aware" narration — including licensed, estate-approved
+  [Iconic Voices](https://elevenlabs.io/blog/iconic-voices) (Maya Angelou, James Dean, Judy
+  Garland, Richard Feynman, Deepak Chopra).
+  [Speechify](https://speechify.com/blog/celebrity-voices-with-text-to-speech/) reads any
+  webpage/PDF/doc in licensed celebrity voices (Snoop Dogg, Gwyneth Paltrow). So "a famous
+  licensed voice reads anything you give it" already exists — the *voice* half of the
+  audiobook vision is real.
+- **Auto-narrated audiobooks are an industry.** Amazon KDP
+  [Virtual Voice](https://kdp.amazon.com/en_US/help/topic/G3QRL9HQNF273Q2H), Apple Books
+  digital narration, and Google Play auto-narration mass-produce synthetic audiobooks,
+  [distributed across the big five retailers](https://publishdrive.com/ai-narrated-audiobooks-retailers.html).
+- **The "LLM director" half-exists as pipelines and research.** LLMs are used to annotate
+  text with SSML/prosodic tags before synthesis
+  ([ICNLSP 2025 French TTS pipeline](https://github.com/hi-paris/Prosody-Control-French-TTS) ·
+  [narrative understanding for expressive TTS](https://arxiv.org/pdf/2509.04072) ·
+  [StoryTTS expressiveness-annotated dataset](https://arxiv.org/pdf/2404.14946)), and
+  Gemini-class TTS takes
+  [inline style tags](https://www.mindstudio.ai/blog/gemini-3-1-flash-tts-controllable-text-to-speech).
+- **What still doesn't exist: an exposed delivery plan.** In every shipping system the
+  prosody is either inferred end-to-end (opaque; you re-roll, you don't edit) or written as
+  markup no listener or reader ever sees. Nobody offers delivery as an explicit,
+  principled, *visible and editable* layer — planned the way a trained speaker plans
+  (stress, rate, volume, melody varied in parallel, word by word), rendered to the eye as a
+  score and to the ear through any licensed voice, with the same score reproducible across
+  voices.
+
+The reader/audiobook application therefore confirms the verdict from the machine side:
+**production quality exists; control and transparency don't.** The differentiator is not
+"expressive voice" (shipped) but "expressiveness you can see, edit, teach, and replay."
+
 ## All sources
 
 Historical: [Prosodia Rationalis (Wikipedia)](https://en.wikipedia.org/wiki/Prosodia_Rationalis) · [Steele at Library of Congress](https://www.loc.gov/item/17006845/) · [Steele scan (Internet Archive)](https://archive.org/details/prosodiarationa01steegoog) · [Walker, The Melody of Speaking Delineated (Wikisource)](https://en.wikisource.org/wiki/The_Melody_of_Speaking_Delineated) · [John Walker (Wikipedia)](https://en.wikipedia.org/wiki/John_Walker_(lexicographer)) · [Visible Speech (Wikipedia)](https://en.wikipedia.org/wiki/Visible_Speech) · [Ekphonetic notation (Wikipedia)](https://en.wikipedia.org/wiki/Ekphonetic_notation) · [Hebrew cantillation (Wikipedia)](https://en.wikipedia.org/wiki/Hebrew_cantillation) · [Churchill's speeches (IWM)](https://www.iwm.org.uk/history/winston-churchill/what-makes-a-churchill-speech) · [How Churchill prepared (ICS)](https://winstonchurchill.org/the-life-of-churchill/life/man-of-words/how-churchill-prepared-for-his-speeches/) · [psalm-form draft (Churchill Book Collector)](https://www.churchillbookcollector.com/pages/books/008734/winston-s-churchill/the-hour-of-our-greatest-effort-is-approaching-an-original-typed-hand-emended-psalm-form-carbon)

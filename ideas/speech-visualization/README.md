@@ -41,6 +41,29 @@ pianist can play a score.
    something was said, not just what — including for Deaf and hard-of-hearing readers
    (which is where current academic research on this is most active).
 
+## One format, two renderers — why the visual layer at all
+
+AI voices can already produce expressive delivery, follow coarse inline directions like
+`[whispers]`, or clone a delivery from reference audio — so the *machine* does not strictly
+need a visual notation. What settles the question is who each half serves:
+
+- **The core artifact is one codified prosody layer attached to text** — measurable values
+  for pitch, loudness, timing, and stress, word by word.
+- **Renderer 1 — visual, for humans:** the score. People can't read a model's internal
+  representation; the visual layer is what makes delivery learnable, copyable, checkable,
+  and showable (teaching, captions, transcripts).
+- **Renderer 2 — compiled, for machines:** the same layer compiles to SSML / audio tags /
+  model conditioning, so any TTS voice can play it back.
+
+The visual half is also the missing **control surface** for AI voices. Today, directing a
+voice is vibes: type "more excited", listen, re-roll. A score lets you see the delivery the
+model intends and edit it precisely — the difference between telling a photo app "warmer"
+and opening the curves editor.
+
+Framed historically: the AI half is the playback engine Steele (1775) and Walker (1787)
+fatally lacked; the visual half is the interface today's voice AI lacks. Notation never
+made instruments sound better either — it made music copyable between people.
+
 ## A sketch
 
 The same sentence, flat and scored:
@@ -82,6 +105,43 @@ sources: [research.md](research.md).
 - **Runs in plain running text**, degrading gracefully to ordinary prose when the layer is
   stripped.
 
+## Extension: the prosody engine — expressive reading (added 2026-08-30)
+
+A second observation, from how reading aloud works today. Legacy read-aloud (screen
+readers, browser "read this page") speaks word by word, neutrally — no tone at all. Newer
+AI readers do interpret, but end-to-end and opaquely: the model guesses a delivery in one
+shot and you can't see or steer the guess.
+
+Humans don't work that way. A speaker thinks the sentence first, *then* plans the
+delivery: which words to stress, where to slow down and speed up, where to drop or raise
+the volume, where the melody moves — several channels varied **in parallel**, word by
+word. That parallel layering is what creates emotion in the voice, and the emotion is what
+creates impact. The difference between an average speaker and Tony Robbins is exactly this
+planning — knowing which notes to hit. Stage Academy shows the planning reduces to a
+handful of teachable principles, which means it is **codifiable**.
+
+The pipeline this implies:
+
+```
+text → prosody planner (the principles as code / an LLM "director")
+     → score (the notation — explicit, visible, editable)
+     → compile to TTS conditioning → any trained, licensed voice
+```
+
+Applications: a real-time expressive reader for any website or PDF (replacing flat
+read-aloud), and on-demand audiobooks — license and train an author's voice once, and any
+text they wrote plays back with delivery, not just words. The explicit score in the middle
+is the difference from today's end-to-end guessing: editable, consistent (same score =
+same delivery in any voice), teachable, and inspectable.
+
+Caveats logged alongside, honestly: (1) modern AI readers are no longer flat — the
+"neutral reader" premise fully holds only for legacy screen readers; the real gap is
+control and consistency, not raw expressiveness. (2) End-to-end models keep improving at
+inferring delivery, so for passive listening they may become "good enough" without an
+explicit layer — the durable wins are control, re-performability, teaching, and
+accessibility. (3) A real person's voice and delivery style require consent and licensing
+(ElevenLabs and Speechify already run licensed celebrity-voice programs).
+
 ## Open questions
 
 - Granularity: per-word or per-syllable? (Syllable is truer to speech; word is far more
@@ -98,3 +158,7 @@ sources: [research.md](research.md).
 
 - **2026-08-30** — Idea captured from a voice note. Prior-art research done and written up
   in [research.md](research.md). Logged here and in the personal vault.
+- **2026-08-30** — Origin corrected: the course is Stage Academy by Vinh Giang.
+- **2026-08-30** — Positioning added (one format, two renderers: visual for humans,
+  compiled for machines). Prosody-engine / expressive-reading extension logged, with a
+  landscape addendum in [research.md](research.md) (section 10).
