@@ -139,7 +139,12 @@ ToBI transcript, and laypeople can't read any of it.
   [RIT on voice tech](https://www.rit.edu/ntid/slpros/instruction/segmental/voice/usingtech))
 - **Singing interfaces** — karaoke/rhythm games (SingStar, Rock Band) scroll pitch as bars
   you match; vocal editors (Melodyne-style) show the voice as a piano-roll. People with no
-  music training sight-read these instantly.
+  music training sight-read these instantly. Note they are all pitch-and-timing only: none
+  notate the performance layer that sheet music also misses — scoops, slides,
+  back-phrasing, breath, word-level dynamics — which is where a prosody notation would add
+  something even for song. Sprechstimme (Schoenberg's specially notated speak-singing,
+  1912) is the classical precedent that speech and song sit on one continuum with no
+  shared notation covering it.
 
 **Takeaway:** visual pitch/stress feedback demonstrably teaches delivery. All of it is
 either drawn diagrams *about* text or plots *beside* text — none of it is a written form

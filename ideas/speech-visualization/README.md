@@ -163,6 +163,23 @@ is simultaneously reading, performing, and looking into a camera. A cue that nee
 thinking fails live. Likely ships as a rehearsal tool first (same tech, lower stakes),
 live prompter second.
 
+### Singers (added 2026-08-30)
+
+It helps singers too — but in a specific way, because singers are the one audience that
+already *has* notation. Sheet music captures the composition (notes, rhythm, dynamics
+marks); what it famously does not capture is the **performance layer**: scoops and slides
+into notes, back-phrasing (singing ahead of or behind the beat), breath placement, runs,
+word-by-word dynamics — the reason two singers with identical sheet music sound nothing
+alike. That performance layer is exactly what this notation encodes for speech, and it's
+missing for song as well.
+
+Two more reasons it fits: most contemporary singers can't read sheet music anyway, while
+karaoke pitch bars prove they'll happily follow flowing visual cues; and speech and song
+are one continuum — Steele saw in 1775 that speech *slides* where music *steps*, and
+Schoenberg needed special notation (Sprechstimme) in 1912 for the in-between. Talk, rap,
+spoken word, and song in **one notation** would be a first — no system today spans that
+continuum.
+
 Caveats logged alongside, honestly: (1) modern AI readers are no longer flat — the
 "neutral reader" premise fully holds only for legacy screen readers; the real gap is
 control and consistency, not raw expressiveness. (2) End-to-end models keep improving at
@@ -194,3 +211,6 @@ accessibility. (3) A real person's voice and delivery style require consent and 
 - **2026-08-30** — Teleprompter application logged: score the script, flow the cues in
   real time, karaoke-style. Possibly the strongest application — a human performs, so
   it's immune to end-to-end TTS getting better.
+- **2026-08-30** — Singers added: notation for the performance layer sheet music misses
+  (scoops, phrasing, breath, word-level dynamics), readable by singers who don't read
+  music; one notation spanning the speech-to-song continuum would be a first.
