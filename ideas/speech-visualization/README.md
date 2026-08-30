@@ -129,10 +129,39 @@ text → prosody planner (the principles as code / an LLM "director")
 ```
 
 Applications: a real-time expressive reader for any website or PDF (replacing flat
-read-aloud), and on-demand audiobooks — license and train an author's voice once, and any
-text they wrote plays back with delivery, not just words. The explicit score in the middle
-is the difference from today's end-to-end guessing: editable, consistent (same score =
-same delivery in any voice), teachable, and inspectable.
+read-aloud); on-demand audiobooks — license and train an author's voice once, and any
+text they wrote plays back with delivery, not just words; and a **prosody teleprompter**
+(next section). The explicit score in the middle is the difference from today's
+end-to-end guessing: editable, consistent (same score = same delivery in any voice),
+teachable, and inspectable.
+
+### The teleprompter angle (added 2026-08-30)
+
+Score the script, then let the prompter *flow* it word by word: the speaker never studies
+the notation in advance — the delivery cues arrive in real time as the text scrolls, and
+since they already know how to read, they can talk with the emotion built in. Users:
+politicians, news and media presenters, social media creators, anyone giving a public
+speech.
+
+Why this may be the strongest application of the whole idea:
+
+- **Immune to the end-to-end-TTS risk.** A human performs, so better AI voices don't
+  compete with it — unlike the reader/audiobook use.
+- **Karaoke is the existence proof.** Millions of untrained people sing roughly on pitch
+  and in time because a UI feeds them timing and pitch cues in real time. Sight-reading
+  is hard; following a flowing cue is easy.
+- **The pros already do it by hand.** Churchill's psalm-form notes and broadcasters'
+  marked-up scripts (bold words, [PAUSE], [SLOW] tags) are exactly this, hand-rolled —
+  proven demand, primitive tooling.
+- **The sync problem is already solved** by voice-following prompters (PromptSmart's
+  VoiceTrack scrolls at the speaker's pace and waits when they pause), so prosody
+  rendering can sit on top of known tech.
+
+The design constraint that decides success: cues must be readable **pre-attentively** —
+size, position, spacing the eye absorbs without conscious decoding — because the speaker
+is simultaneously reading, performing, and looking into a camera. A cue that needs
+thinking fails live. Likely ships as a rehearsal tool first (same tech, lower stakes),
+live prompter second.
 
 Caveats logged alongside, honestly: (1) modern AI readers are no longer flat — the
 "neutral reader" premise fully holds only for legacy screen readers; the real gap is
@@ -162,3 +191,6 @@ accessibility. (3) A real person's voice and delivery style require consent and 
 - **2026-08-30** — Positioning added (one format, two renderers: visual for humans,
   compiled for machines). Prosody-engine / expressive-reading extension logged, with a
   landscape addendum in [research.md](research.md) (section 10).
+- **2026-08-30** — Teleprompter application logged: score the script, flow the cues in
+  real time, karaoke-style. Possibly the strongest application — a human performs, so
+  it's immune to end-to-end TTS getting better.

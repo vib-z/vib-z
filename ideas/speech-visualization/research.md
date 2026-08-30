@@ -285,6 +285,14 @@ with planned, principle-driven delivery (see README). What exists today:
   [StoryTTS expressiveness-annotated dataset](https://arxiv.org/pdf/2404.14946)), and
   Gemini-class TTS takes
   [inline style tags](https://www.mindstudio.ai/blog/gemini-3-1-flash-tts-controllable-text-to-speech).
+- **Teleprompters: manual cues and voice-sync exist; prosody rendering doesn't.**
+  Standard prompter practice is hand-marked, coarse cues — bold or colored words and
+  [PAUSE] / [SLOW] / [BREATH] tags
+  ([Teleprompter.com's markup guidance](https://www.teleprompter.com/blog/writing-effective-speech-scripts-for-teleprompter-apps)) —
+  and [PromptSmart's VoiceTrack](https://promptsmart.com/how-it-works) already solves
+  speaker-synced scrolling (follows the voice, waits during pauses, resumes on script).
+  No product renders continuous visual prosody (melody, volume, rate) on the scroll: the
+  two halves exist separately and have never been combined.
 - **What still doesn't exist: an exposed delivery plan.** In every shipping system the
   prosody is either inferred end-to-end (opaque; you re-roll, you don't edit) or written as
   markup no listener or reader ever sees. Nobody offers delivery as an explicit,
