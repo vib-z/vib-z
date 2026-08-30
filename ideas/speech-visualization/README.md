@@ -54,9 +54,9 @@ size changes — but even the crude version already reads differently, which is 
 
 ## Where it came from
 
-Sparked by the early chapters of a communication course about the ways of speech — pitch,
-melody, pace, volume. (Very likely the "vocal toolbox" framing popularized by Julian
-Treasure: register, timbre, prosody, pace, pitch, volume.) The observation underneath: we
+Sparked by the early chapters of **Stage Academy by Vinh Giang** — the Vocal
+Foundations / Vocal Mastery modules, which treat the voice as an instrument and teach the
+ways of speech: rate, volume, pitch, melody, projection. The observation underneath: we
 each learned these skills somehow, but there has never been a common way to *write them
 down*.
 
