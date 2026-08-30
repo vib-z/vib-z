@@ -191,6 +191,35 @@ explicit layer — the durable wins are control, re-performability, teaching, an
 accessibility. (3) A real person's voice and delivery style require consent and licensing
 (ElevenLabs and Speechify already run licensed celebrity-voice programs).
 
+### Implementation paths for the audio renderer (added 2026-08-30)
+
+Findings from building [demo.html](demo.html), which speaks the score through the browser's
+speech synthesis. Most of that demo's choppiness is **not** the voice — it's synthesizing
+one utterance per word, so each word gets its own start/stop envelope and the engine can't
+coarticulate across the seams. Synthesizing a phrase at a time is the single biggest
+quality win, ahead of any voice upgrade. Beyond that, three production paths:
+
+1. **SSML-capable neural TTS** (Azure, Google Cloud, Polly) — the score compiles almost
+   literally to `<prosody>` spans (pitch, rate, volume, contours) at good voice quality.
+   The closest thing to a drop-in upgrade; Azure's fine-grained control fits best.
+2. **Signal post-processing** — synthesize the sentence naturally once, then bend F0,
+   duration and gain onto the score (vocoder / PSOLA class). Exact acoustic fidelity —
+   the score becomes ground truth — with artifacts beyond a few semitones.
+3. **Prosody-conditioned neural models** (FastSpeech-2-style variance adaptors, prosody
+   transfer) — accept explicit per-word pitch/duration/energy and render naturally.
+   Technically the right home; costs an API, buys a self-hosted model.
+
+**The tension that matters:** the most natural-sounding voices are the least controllable.
+ElevenLabs v3 dropped SSML for vibe tags precisely because the model does its own prosodic
+planning; pushing an explicit contour onto a model that has already decided how to say the
+line can land worse than either alone — over-directed and uncanny. A real implementation
+must **replace** the model's planning, not layer on top of it. That is the strongest
+long-term argument for path 3 over path 1.
+
+Scope note: this only constrains the reader/audiobook applications. For the teleprompter
+and singer uses the human is the voice, so synthesis quality is irrelevant there — another
+reason those remain the more defensible wedges.
+
 ## Open questions
 
 - Granularity: per-word or per-syllable? (Syllable is truer to speech; word is far more
@@ -219,3 +248,6 @@ accessibility. (3) A real person's voice and delivery style require consent and 
   music; one notation spanning the speech-to-song continuum would be a first.
 - **2026-08-30** — First visual sketch built: [demo.html](demo.html) (JFK moon sentence,
   hand-scored; voice slider + play mode).
+- **2026-08-30** — Audio-renderer implementation paths logged (phrase-level synthesis
+  first; SSML TTS vs. signal post-processing vs. prosody-conditioned models; the
+  natural-vs-controllable tension).
