@@ -162,6 +162,13 @@
     font-variant-numeric: tabular-nums;
     min-width: 4ch; text-align: right;
   }
+  .sound-toggle {
+    display: flex; align-items: center; gap: 6px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); cursor: pointer; white-space: nowrap;
+  }
+  .sound-toggle input { accent-color: var(--accent); cursor: pointer; }
   .hint { font-size: 13px; color: var(--muted); margin: 10px 2px 0; }
 
   .legend { margin: 52px 0 0; }
@@ -229,8 +236,9 @@
         <input type="range" id="voice1" min="0" max="100" value="0" aria-label="Amount of voice written into the text">
         <span class="slider-val" id="val1">0%</span>
       </div>
+      <label class="sound-toggle" id="soundwrap1"><input type="checkbox" id="sound1" checked> Sound</label>
     </div>
-    <p class="hint">Hover or tab to any word to see its values. At 0% this is ordinary text — the layer strips away cleanly.</p>
+    <p class="hint">Play speaks with your browser's built-in voice, word by word from the score — and the slider shapes the audio too: at 0% it reads flat, at 100% it performs. Hover or tab to any word to see its values.</p>
   </div>
 
   <div class="legend">
@@ -259,6 +267,7 @@
           <input type="range" id="voice2" min="0" max="100" value="100" aria-label="Amount of voice written into the text">
           <span class="slider-val" id="val2">100%</span>
         </div>
+        <label class="sound-toggle" id="soundwrap2"><input type="checkbox" id="sound2" checked> Sound</label>
       </div>
     </div>
   </div>
@@ -278,6 +287,23 @@
 (function () {
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  var synth = window.speechSynthesis || null;
+  var voice = null;
+  function pickVoice() {
+    if (!synth) return;
+    var vs = synth.getVoices();
+    if (!vs.length) return;
+    function firstMatch(fn) { for (var i = 0; i < vs.length; i++) if (fn(vs[i])) return vs[i]; return null; }
+    voice = firstMatch(function (v) { return /^en[-_]US/i.test(v.lang) && v.localService; }) ||
+            firstMatch(function (v) { return /^en/i.test(v.lang) && v.localService; }) ||
+            firstMatch(function (v) { return /^en/i.test(v.lang); }) || vs[0];
+  }
+  pickVoice();
+  if (synth && typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", pickVoice);
+  else if (synth) synth.onvoiceschanged = pickVoice;
+  function clamp(x, lo, hi) { return Math.min(hi, Math.max(lo, x)); }
+  var allStops = []; // so the two cards never talk over each other
+
   // word: [text, pitch 0-1, volume 0-1, duration factor, stress, pauseAfter ms]
   var jfk = [
     ["We",.45,.55,1,0,0],["choose",.68,.78,1.3,1,0],["to",.5,.5,1,0,0],["go",.56,.62,1,0,0],
@@ -293,15 +319,17 @@
     ["It's",.52,.5,1,0,0],["how",.82,.86,1.6,1,0],["you",.56,.5,1,0,0],["say",.5,.62,1.4,0,0],["it.",.34,.4,1.3,0,0]
   ];
 
-  function buildScore(stageId, textId, playId, voiceId, valId, words, startAt) {
+  function buildScore(stageId, textId, playId, voiceId, valId, soundId, words, startAt) {
     var stage = document.getElementById(stageId);
     var textEl = document.getElementById(textId);
     var svg = stage.querySelector("svg");
     var slider = document.getElementById(voiceId);
     var valEl = document.getElementById(valId);
     var playBtn = document.getElementById(playId);
+    var soundBox = document.getElementById(soundId);
     var tip = document.getElementById("tip");
-    var t = 0, playTimer = null;
+    var t = 0, playTimer = null, playToken = 0, playing = false;
+    if (!synth) document.getElementById("soundwrap" + soundId.slice(-1)).hidden = true;
 
     words.forEach(function (w, i) {
       var s = document.createElement("span");
@@ -374,24 +402,57 @@
     slider.addEventListener("input", function () { setT(slider.value / 100); });
 
     function stopPlay() {
+      playToken++;
+      playing = false;
       if (playTimer) { clearTimeout(playTimer); playTimer = null; }
+      if (synth) synth.cancel();
       spans.forEach(function (s) { s.classList.remove("playing"); });
       playBtn.textContent = "▶ Play the score";
     }
 
+    allStops.push(stopPlay);
+
     playBtn.addEventListener("click", function () {
-      if (playTimer) { stopPlay(); return; }
+      if (playing) { stopPlay(); return; }
+      allStops.forEach(function (f) { f(); });
+      playing = true;
+      playToken++;
+      var myToken = playToken;
       playBtn.textContent = "■ Stop";
       var i = 0;
       function step() {
+        if (myToken !== playToken) return;
         spans.forEach(function (s) { s.classList.remove("playing"); });
         if (i >= words.length) { stopPlay(); return; }
         spans[i].classList.add("playing");
         var w = words[i];
-        var wordMs = 330 * w[3] + w[0].length * 14;
-        var pauseMs = w[5];
         i++;
-        playTimer = setTimeout(step, wordMs + pauseMs);
+        var pauseMs = Math.round(w[5] * t); // at 0% voice, read straight through
+        var spoken = w[0].replace(/[^A-Za-z']/g, "");
+        if (synth && voice && soundBox.checked && spoken) {
+          // one utterance per word, its prosody read off the score and
+          // scaled by the voice slider: 0% reads flat, 100% performs
+          var u = new SpeechSynthesisUtterance(spoken);
+          u.voice = voice;
+          u.lang = voice.lang;
+          u.pitch = clamp(1 + (w[1] - 0.5) * 1.3 * t, 0.1, 2);
+          u.rate = clamp(1.05 / (1 + (w[3] - 1) * 0.85 * t), 0.5, 1.4);
+          u.volume = clamp(0.8 + (w[2] - 0.55) * 0.7 * t, 0.2, 1);
+          var advanced = false;
+          var advance = function () {
+            if (advanced || myToken !== playToken) return;
+            advanced = true;
+            if (playTimer) clearTimeout(playTimer);
+            playTimer = setTimeout(step, pauseMs + 30);
+          };
+          u.onend = advance;
+          u.onerror = advance;
+          playTimer = setTimeout(advance, 2600); // safety if the engine stalls
+          synth.speak(u);
+        } else {
+          var wordMs = 330 * w[3] + w[0].length * 14;
+          playTimer = setTimeout(step, wordMs + pauseMs);
+        }
       }
       step();
     });
@@ -434,7 +495,7 @@
     return { apply: apply };
   }
 
-  buildScore("stage1", "text1", "play1", "voice1", "val1", jfk, 0);
-  buildScore("stage2", "text2", "play2", "voice2", "val2", conv, 1);
+  buildScore("stage1", "text1", "play1", "voice1", "val1", "sound1", jfk, 0);
+  buildScore("stage2", "text2", "play2", "voice2", "val2", "sound2", conv, 1);
 })();
 </script>
