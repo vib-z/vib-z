@@ -1,0 +1,440 @@
+<title>Speech Score</title>
+<style>
+  :root {
+    --bg: #F5F4EF;
+    --surface: #FDFCF9;
+    --ink: #23272B;
+    --muted: #6E7378;
+    --faint: #B9BCB4;
+    --accent: #0E7C7B;
+    --accent-soft: rgba(14, 124, 123, 0.16);
+    --stress: #C25E12;
+    --line: #E3E1D8;
+    --tooltip-bg: #23272B;
+    --tooltip-ink: #F5F4EF;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15181B;
+      --surface: #1C2024;
+      --ink: #E9E7E0;
+      --muted: #9AA0A6;
+      --faint: #4A4F54;
+      --accent: #34B3B0;
+      --accent-soft: rgba(52, 179, 176, 0.2);
+      --stress: #E8935B;
+      --line: #2C3136;
+      --tooltip-bg: #E9E7E0;
+      --tooltip-ink: #15181B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15181B;
+    --surface: #1C2024;
+    --ink: #E9E7E0;
+    --muted: #9AA0A6;
+    --faint: #4A4F54;
+    --accent: #34B3B0;
+    --accent-soft: rgba(52, 179, 176, 0.2);
+    --stress: #E8935B;
+    --line: #2C3136;
+    --tooltip-bg: #E9E7E0;
+    --tooltip-ink: #15181B;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0 20px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 56px 0 72px; }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 14px;
+  }
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-variation-settings: "opsz" 90;
+    font-weight: 560;
+    font-size: clamp(34px, 5.4vw, 52px);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0 0 16px;
+  }
+  .lede { color: var(--muted); max-width: 62ch; margin: 0 0 40px; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  .score-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 26px 26px 20px;
+    margin: 0 0 18px;
+  }
+  .score-label {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .score-stage { position: relative; }
+  .score-stage svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .score-text {
+    position: relative;
+    font-family: "Fraunces", Georgia, serif;
+    font-variation-settings: "opsz" 40;
+    font-size: clamp(19px, 3.2vw, 29px);
+    line-height: 3.1;
+    padding: 10px 4px;
+    cursor: default;
+  }
+  .score-text .w {
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    border-radius: 6px;
+    padding: 0 0.08em;
+    outline: none;
+    transition: transform 0.35s cubic-bezier(.3,.7,.3,1), font-size 0.35s, font-weight 0.35s, letter-spacing 0.35s, margin 0.35s, color 0.35s, background 0.2s;
+  }
+  .score-text .w:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+  .score-text .w.playing { background: var(--accent-soft); }
+  @media (prefers-reduced-motion: reduce) {
+    .score-text .w { transition: none; }
+  }
+
+  .controls {
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    padding: 6px 2px 0;
+  }
+  .play-btn {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 14px; font-weight: 600;
+    color: var(--bg);
+    background: var(--accent);
+    border: none; border-radius: 999px;
+    padding: 9px 20px;
+    cursor: pointer;
+  }
+  .play-btn:hover { filter: brightness(1.08); }
+  .play-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .slider-group { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 220px; }
+  .slider-group label {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); white-space: nowrap;
+  }
+  input[type="range"] {
+    flex: 1; appearance: none; height: 3px; border-radius: 2px;
+    background: var(--line); accent-color: var(--accent); cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--accent); border: 3px solid var(--surface);
+    box-shadow: 0 0 0 1px var(--line);
+  }
+  input[type="range"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .slider-val {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    min-width: 4ch; text-align: right;
+  }
+  .hint { font-size: 13px; color: var(--muted); margin: 10px 2px 0; }
+
+  .legend { margin: 52px 0 0; }
+  h2 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 560; font-size: 24px; margin: 0 0 18px;
+  }
+  .chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .chip {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .chip .k {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); display: block; margin-bottom: 4px;
+  }
+  .chip .v { font-size: 13.5px; color: var(--muted); }
+  .chip .demo { font-family: "Fraunces", Georgia, serif; font-size: 17px; color: var(--ink); display: block; margin-top: 6px; }
+
+  .second { margin-top: 52px; }
+  .foot {
+    margin-top: 56px; padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 13px; color: var(--muted); max-width: 68ch;
+  }
+
+  #tip {
+    position: fixed; z-index: 10;
+    background: var(--tooltip-bg); color: var(--tooltip-ink);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; line-height: 1.4;
+    padding: 6px 10px; border-radius: 6px;
+    pointer-events: none; white-space: nowrap;
+    transform: translate(-50%, calc(-100% - 10px));
+  }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..800&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400&display=swap">
+
+<div class="wrap">
+  <p class="eyebrow">Idea 001 · Speech visualization · demo sketch</p>
+  <h1>Sheet music for talking.</h1>
+  <p class="lede">
+    Plain text keeps the words and throws away the voice. This is the same sentence with the
+    voice <strong>written back in</strong>: height is pitch, size is volume, stretch is time,
+    color is stress, space is a pause. Drag the slider to bring the voice in, then press play
+    to read it the way a teleprompter would flow it.
+  </p>
+
+  <div class="score-card">
+    <div class="score-label">
+      <span>John F. Kennedy · Rice University, 1962 · delivery as performed</span>
+      <span>two-line staff = the speaker's pitch range</span>
+    </div>
+    <div class="score-stage" id="stage1">
+      <svg aria-hidden="true"></svg>
+      <p class="score-text" id="text1" aria-label="Scored sentence, hover any word for its values"></p>
+    </div>
+    <div class="controls">
+      <button class="play-btn" id="play1" type="button">▶ Play the score</button>
+      <div class="slider-group">
+        <label for="voice1">Voice</label>
+        <input type="range" id="voice1" min="0" max="100" value="0" aria-label="Amount of voice written into the text">
+        <span class="slider-val" id="val1">0%</span>
+      </div>
+    </div>
+    <p class="hint">Hover or tab to any word to see its values. At 0% this is ordinary text — the layer strips away cleanly.</p>
+  </div>
+
+  <div class="legend">
+    <h2>The notation</h2>
+    <div class="chips">
+      <div class="chip"><span class="k">Pitch</span><span class="v">Words ride up and down between the two lines — the melody of the sentence.</span></div>
+      <div class="chip"><span class="k">Volume</span><span class="v">Louder grows bigger and heavier; a trail-off shrinks.</span><span class="demo" style="font-weight:700;font-size:21px">loud</span></div>
+      <div class="chip"><span class="k">Rate</span><span class="v">Stretched letters mean slow down; tight means keep moving.</span><span class="demo" style="letter-spacing:0.22em">s l o w</span></div>
+      <div class="chip"><span class="k">Stress</span><span class="v">The words you lean on carry the accent color.</span><span class="demo" style="color:var(--stress);font-weight:650">this one</span></div>
+      <div class="chip"><span class="k">Pause</span><span class="v">Silence takes up real space on the line.</span><span class="demo">breathe&nbsp;&nbsp;&nbsp;&nbsp;here</span></div>
+    </div>
+  </div>
+
+  <div class="second">
+    <h2>Works on anything you'd say out loud</h2>
+    <div class="score-card">
+      <div class="score-label"><span>Conversational</span></div>
+      <div class="score-stage" id="stage2">
+        <svg aria-hidden="true"></svg>
+        <p class="score-text" id="text2"></p>
+      </div>
+      <div class="controls">
+        <button class="play-btn" id="play2" type="button">▶ Play the score</button>
+        <div class="slider-group">
+          <label for="voice2">Voice</label>
+          <input type="range" id="voice2" min="0" max="100" value="100" aria-label="Amount of voice written into the text">
+          <span class="slider-val" id="val2">100%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot">
+    A sketch of Idea 001: one codified prosody layer on plain English — readable by people,
+    playable by machines. In the real thing the scoring is automatic (from a recording) or
+    planned (principles as code); here it is hand-scored to JFK's actual delivery, including
+    the famous drawn-out, dropped-low <em>hard</em>. Full write-up and prior-art research:
+    <code>ideas/speech-visualization/</code> in the ideas log.
+  </p>
+</div>
+
+<div id="tip" hidden></div>
+
+<script>
+(function () {
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // word: [text, pitch 0-1, volume 0-1, duration factor, stress, pauseAfter ms]
+  var jfk = [
+    ["We",.45,.55,1,0,0],["choose",.68,.78,1.3,1,0],["to",.5,.5,1,0,0],["go",.56,.62,1,0,0],
+    ["to",.46,.5,1,0,0],["the",.42,.46,1,0,0],["Moon",.78,.88,1.5,1,520],
+    ["in",.38,.5,1,0,0],["this",.46,.56,1,0,0],["decade",.6,.72,1.25,1,420],
+    ["and",.36,.46,1,0,0],["do",.5,.6,1,0,0],["the",.42,.46,1,0,0],["other",.5,.6,1,0,0],["things,",.44,.54,1.1,0,620],
+    ["not",.7,.8,1.2,1,0],["because",.5,.55,1,0,0],["they",.45,.5,1,0,0],["are",.4,.5,1,0,0],["easy,",.82,.7,1.45,1,560],
+    ["but",.46,.56,1,0,0],["because",.56,.66,1,0,0],["they",.5,.55,1,0,0],["are",.55,.62,1.2,0,0],
+    ["hard.",.22,.97,2.3,1,0]
+  ];
+  var conv = [
+    ["It's",.5,.5,1,0,0],["not",.62,.7,1.1,1,0],["what",.66,.76,1.2,1,0],["you",.5,.5,1,0,0],["say.",.42,.55,1.1,0,680],
+    ["It's",.52,.5,1,0,0],["how",.82,.86,1.6,1,0],["you",.56,.5,1,0,0],["say",.5,.62,1.4,0,0],["it.",.34,.4,1.3,0,0]
+  ];
+
+  function buildScore(stageId, textId, playId, voiceId, valId, words, startAt) {
+    var stage = document.getElementById(stageId);
+    var textEl = document.getElementById(textId);
+    var svg = stage.querySelector("svg");
+    var slider = document.getElementById(voiceId);
+    var valEl = document.getElementById(valId);
+    var playBtn = document.getElementById(playId);
+    var tip = document.getElementById("tip");
+    var t = 0, playTimer = null;
+
+    words.forEach(function (w, i) {
+      var s = document.createElement("span");
+      s.className = "w";
+      s.textContent = w[0];
+      s.tabIndex = 0;
+      s.dataset.i = i;
+      textEl.appendChild(s);
+      textEl.appendChild(document.createTextNode(" "));
+    });
+    var spans = textEl.querySelectorAll(".w");
+
+    function apply() {
+      spans.forEach(function (s, i) {
+        var w = words[i];
+        var pitch = w[1], vol = w[2], dur = w[3], stress = w[4], pause = w[5];
+        var dy = (0.5 - pitch) * 52 * t;
+        s.style.transform = "translateY(" + dy.toFixed(1) + "px)";
+        s.style.fontSize = (1 + (vol - 0.5) * 1.05 * t).toFixed(3) + "em";
+        s.style.fontWeight = Math.round(400 + (vol - 0.4) * 520 * t);
+        s.style.letterSpacing = (Math.max(0, dur - 1) * 0.085 * t).toFixed(3) + "em";
+        s.style.marginRight = (pause / 1000 * 1.9 * t).toFixed(2) + "em";
+        s.style.color = stress && t > 0.35 ? "var(--stress)" : "var(--ink)";
+      });
+      drawLines();
+    }
+
+    function drawLines() {
+      var stageRect = stage.getBoundingClientRect();
+      if (stageRect.width === 0) return;
+      svg.setAttribute("viewBox", "0 0 " + stageRect.width + " " + stageRect.height);
+      var rows = {};
+      spans.forEach(function (s, i) {
+        // group by baseline: bottoms of baseline-aligned words nearly coincide,
+        // while tops diverge with font size (offsetTop/Height ignore transforms)
+        var bottom = s.offsetTop + s.offsetHeight;
+        var key = Math.round(bottom / 40);
+        if (!rows[key]) rows[key] = [];
+        var center = bottom - s.offsetHeight * 0.55;
+        var dy = (0.5 - words[i][1]) * 52 * t;
+        rows[key].push({ x: s.offsetLeft + s.offsetWidth / 2, y: center + dy, base: center });
+      });
+      var html = "";
+      Object.keys(rows).forEach(function (k) {
+        var pts = rows[k];
+        var base = pts.reduce(function (a, p) { return a + p.base; }, 0) / pts.length;
+        // two-line staff: the speaker's range
+        var op = (0.5 * t).toFixed(2);
+        html += '<line x1="0" x2="' + stageRect.width + '" y1="' + (base - 30) + '" y2="' + (base - 30) + '" stroke="var(--faint)" stroke-width="1" stroke-dasharray="1 5" opacity="' + op + '"/>';
+        html += '<line x1="0" x2="' + stageRect.width + '" y1="' + (base + 30) + '" y2="' + (base + 30) + '" stroke="var(--faint)" stroke-width="1" stroke-dasharray="1 5" opacity="' + op + '"/>';
+        if (pts.length > 1) {
+          var d = "M " + pts[0].x + " " + pts[0].y;
+          for (var i = 0; i < pts.length - 1; i++) {
+            var midX = (pts[i].x + pts[i + 1].x) / 2;
+            d += " C " + midX + " " + pts[i].y + ", " + midX + " " + pts[i + 1].y + ", " + pts[i + 1].x + " " + pts[i + 1].y;
+          }
+          html += '<path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="1.6" opacity="' + (0.55 * t).toFixed(2) + '"/>';
+        }
+      });
+      svg.innerHTML = html;
+    }
+
+    function setT(v) {
+      t = v;
+      slider.value = Math.round(v * 100);
+      valEl.textContent = Math.round(v * 100) + "%";
+      apply();
+    }
+
+    slider.addEventListener("input", function () { setT(slider.value / 100); });
+
+    function stopPlay() {
+      if (playTimer) { clearTimeout(playTimer); playTimer = null; }
+      spans.forEach(function (s) { s.classList.remove("playing"); });
+      playBtn.textContent = "▶ Play the score";
+    }
+
+    playBtn.addEventListener("click", function () {
+      if (playTimer) { stopPlay(); return; }
+      playBtn.textContent = "■ Stop";
+      var i = 0;
+      function step() {
+        spans.forEach(function (s) { s.classList.remove("playing"); });
+        if (i >= words.length) { stopPlay(); return; }
+        spans[i].classList.add("playing");
+        var w = words[i];
+        var wordMs = 330 * w[3] + w[0].length * 14;
+        var pauseMs = w[5];
+        i++;
+        playTimer = setTimeout(step, wordMs + pauseMs);
+      }
+      step();
+    });
+
+    spans.forEach(function (s, i) {
+      function show() {
+        var w = words[i];
+        var bits = ["pitch " + Math.round(w[1] * 100) + "%", "vol " + Math.round(w[2] * 100) + "%", "length " + w[3] + "×"];
+        if (w[4]) bits.push("stress");
+        if (w[5]) bits.push("pause " + w[5] + "ms");
+        tip.textContent = bits.join(" · ");
+        tip.hidden = false;
+        var r = s.getBoundingClientRect();
+        tip.style.left = (r.left + r.width / 2) + "px";
+        tip.style.top = r.top + "px";
+      }
+      function hide() { tip.hidden = true; }
+      s.addEventListener("mouseenter", show);
+      s.addEventListener("mouseleave", hide);
+      s.addEventListener("focus", show);
+      s.addEventListener("blur", hide);
+    });
+
+    window.addEventListener("resize", apply);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
+
+    // entrance: the text finds its voice
+    if (reduced || startAt === 1) {
+      setT(startAt);
+    } else {
+      setT(0);
+      var begin = null;
+      requestAnimationFrame(function anim(ts) {
+        if (!begin) begin = ts;
+        var p = Math.min(1, (ts - begin - 500) / 1600);
+        if (p > 0) setT(0.5 - Math.cos(Math.PI * p) / 2);
+        if (p < 1) requestAnimationFrame(anim);
+      });
+    }
+    return { apply: apply };
+  }
+
+  buildScore("stage1", "text1", "play1", "voice1", "val1", jfk, 0);
+  buildScore("stage2", "text2", "play2", "voice2", "val2", conv, 1);
+})();
+</script>

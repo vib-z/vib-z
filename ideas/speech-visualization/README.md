@@ -1,6 +1,9 @@
 # Speech visualization — writing the music of speech
 
 **Status:** idea, logged 2026-08-30. Researched, not built. Prior art: [research.md](research.md).
+**Demo:** [demo.html](demo.html) — an interactive sketch: JFK's moon sentence hand-scored
+(pitch = height on a two-line staff, volume = size/weight, rate = stretch, stress = color,
+pause = space), with a slider that writes the voice in and a teleprompter-style play mode.
 
 ## The problem
 
@@ -214,3 +217,5 @@ accessibility. (3) A real person's voice and delivery style require consent and 
 - **2026-08-30** — Singers added: notation for the performance layer sheet music misses
   (scoops, phrasing, breath, word-level dynamics), readable by singers who don't read
   music; one notation spanning the speech-to-song continuum would be a first.
+- **2026-08-30** — First visual sketch built: [demo.html](demo.html) (JFK moon sentence,
+  hand-scored; voice slider + play mode).
