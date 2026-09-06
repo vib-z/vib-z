@@ -31,3 +31,19 @@ All five repos exist and match the post's categories on inspection. Notes below 
 **`arcboxlabs/arcbox`** — Container/VM runtime for macOS (Docker Desktop / OrbStack alternative), written from scratch in Rust with a custom hypervisor, VirtIO devices, and Docker CLI compatibility. Markets sub-100ms-boot disposable microVMs specifically as AI-agent sandboxes — matches the "isolated execution environments" tag well. ~3.1k stars, dual MIT/Apache-2.0 license, public beta but active (nearly 2k commits, open issues/PRs, roadmap). [ESTABLISHED]
 
 **Overall confidence:** Moderate. Four of five check out cleanly against a direct repo fetch. One (`orca`) has a star-count figure that looks anomalous and should be treated as unverified until checked again. None of these were tested by installing or running the code — this is a metadata-level review (README, stars, commit/issue activity), not a functional or security audit.
+
+---
+
+## 2026-09-06 (addendum) — `rmyndharis/OpenWA`
+
+Source: link shared directly, added to this log on request. https://github.com/rmyndharis/OpenWA
+
+**What it is:** A free, self-hosted WhatsApp API gateway — REST API + webhooks for sending/receiving messages, managing sessions, groups, and running multiple WhatsApp accounts on one instance. Ships an MCP server, so it's a plausible "give my agent a WhatsApp tool" building block, not itself an agent framework.
+
+**How it works:** NestJS 11 / TypeScript backend. It does **not** use Meta's official WhatsApp Cloud API — it connects through two swappable reverse-engineered client libraries: `whatsapp-web.js` (drives a real headless Chromium browser session, ~300–500MB RAM per session, lower ban risk since it mimics the actual web client) or `baileys` (a lightweight WebSocket protocol implementation, no browser, ~30–80MB per session, higher ban risk). Pluggable storage (SQLite/Postgres), pluggable cache (Redis), a BullMQ-based durable webhook outbox queue, S3/MinIO media storage, a bundled React dashboard, Docker Compose deploy.
+
+**How good is it:** [UNCERTAIN on the exact number, ESTABLISHED that it's a real, non-trivial project] Two independent fetches disagreed on stars — one read 13.8k stars/3.2k forks, a separate cross-check read 8,165 stars/1,761 forks — same kind of inconsistency seen with `orca` above, so treat any specific figure as approximate. What's consistent across both: ~2,495 commits, MIT license, 16+ docs pages, multi-arch Docker, a plugin ecosystem (Chatwoot, Typebot, n8n nodes in a sister repo). This reads as a real, actively built project, not a toy — but it's unofficial/community-run, so "good" has to be qualified against what it fundamentally is: automation against WhatsApp's terms of service, not with them.
+
+**The important caveat, stated by the project itself:** because it doesn't use Meta's official API, "there is always a non-zero risk of account restriction or ban." Its own docs recommend: use a burner number you can afford to lose, never your real personal/business number; warm up new numbers slowly; rate-limit to a few messages/minute; and — for anything regulated (healthcare, finance, EU/GDPR-DMA contexts) — use Meta's official Cloud API instead, not this. Also noted: at least one other GitHub account (`alfaris123/OpenWA`) hosts an identically-described repo, which could be a legitimate fork or could be a copy — not independently resolved here.
+
+**Verdict:** Solid engineering for what it is, but "good" is conditional — fine for personal projects, internal tooling, and hobbyist automation; not something to point at a number that matters to you, and not appropriate anywhere compliance is in play.
