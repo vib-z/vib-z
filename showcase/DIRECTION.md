@@ -89,7 +89,8 @@ Use **as much of your library's native vocabulary as possible**. This is a bread
 
 ## 8. Technical spec (all five videos)
 
-- **1920×1080, 30 fps, duration exactly 30.00s** (900 frames, never longer).
+- **1080×1920 vertical (9:16), 30 fps, duration exactly 30.00s** (900 frames, never longer).
+  Built for TikTok / Instagram Reels / YouTube Shorts. See §10 for the platform rules.
 - H.264 High, yuv420p, `-movflags +faststart`, aim for ≤ 14 MB (CRF ~20, or cap the bitrate).
 - AAC 192 kbps, 48 kHz stereo. **−14 LUFS integrated, true peak ≤ −1 dBTP.** VO about 8–10 dB above the music bed.
 - Narration: use `_shared/vo/vo_full.wav` as-is (already placed on the timeline), or the per-line
@@ -105,6 +106,36 @@ Use **as much of your library's native vocabulary as possible**. This is a bread
 - `REPORT.md`: which recipes/components/skills from the library were used (with paths), what was
   native vs hand-built, what broke and how it was fixed, render time, and an honest 1–10
   scorecard (motion · transitions · sound · ease of use · agent-friendliness)
+
+## 10. Built to go viral (these rules override anything above that conflicts)
+
+The goal is for these videos to spread on TikTok, Reels and Shorts. Everything is **made by code only**:
+no AI generation services and no paid APIs (no OpenRouter). Use only open-licensed fonts and the
+library's own bundled or free assets.
+
+1. **Vertical 1080×1920.** Compose every scene for a phone held upright. Stack elements vertically, put the
+   big numbers in the middle, and let the Earth or orbit fill the frame height.
+2. **Platform safe zones.** Keep all text and key action inside **x 90–950, y 250–1480**.
+   The bottom ~440px (caption, username, music ticker), the right ~130px (like, comment, share buttons) and the top ~250px are covered
+   by the app UI. Backgrounds and motion can bleed to the edges, but text must not.
+3. **Frame 0 must stop the scroll. No black opening frame.** At frame 0 the viewer already sees
+   the countdown **00:30**, big and bright, with the crimson pulse ring around it, and something moves in the first 3 frames.
+   "IN THE NEXT 30 SECONDS" is fully readable by 0.5s, even on mute. (The heartbeat audio still hits at 0.0.)
+4. **Burned-in captions for every spoken word**, synced to `vo_timeline.json` (karaoke style:
+   the active word highlights). Most feed viewers watch muted, so the story must make sense with
+   no sound. Bold, ≥ 64px, high contrast with a stroke or shadow, at most 3–4 words on screen, inside the safe zone.
+   Captions can merge with the kinetic type when the type already shows the words.
+5. **A pattern interrupt every 2–3 seconds** (cut, zoom, color shift, scale jump). Never let the frame settle.
+6. **The numbers are the stars.** Each scene's number is the biggest thing on screen when it lands
+   (≥ 300px tall) and readable at a glance. Scrollers decide in about 1 second.
+7. **Seamless loop.** The last frame (29.9–30.0s) must match frame 0's composition (countdown ring, same
+   framing), so the countdown snapping from 00:00 back to 00:30 feels like one continuous video. Replays count toward reach.
+8. **S8 isn't pure black.** At 26.0 the sound goes silent and the background goes dark, but the countdown ring and captions
+   stay visible (a fully black frame reads as "video ended" and people swipe away).
+9. **Cover frame.** `poster.jpg` is the platform cover: the most striking frame with a big number
+   (the lightning drop at ~16.5–17.3s is the default). Make sure it works as a still.
+10. **Sound for sound-on viewers.** Strong transient on frame 0 (the heartbeat), a drop you can feel at 16.0,
+    original music only (no copyrighted tracks), at −14 LUFS.
 
 | Slug | Library | Suggested look |
 |---|---|---|
