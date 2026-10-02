@@ -1,0 +1,399 @@
+{
+ "fps": 30,
+ "duration": 30.0,
+ "bpm": 120,
+ "sample_rate": 48000,
+ "voice": "Kokoro af_heart",
+ "lines": [
+  {
+   "id": "L1",
+   "scene": "S1",
+   "text": "In the next thirty seconds...",
+   "start": 0.8,
+   "end": 2.182,
+   "file": "vo/lines/L1_48k.wav",
+   "words": [
+    {
+     "w": "in",
+     "start": 0.8,
+     "end": 0.92
+    },
+    {
+     "w": "the",
+     "start": 0.92,
+     "end": 1.02
+    },
+    {
+     "w": "next",
+     "start": 1.02,
+     "end": 1.26
+    },
+    {
+     "w": "30",
+     "start": 1.26,
+     "end": 1.58
+    },
+    {
+     "w": "seconds.",
+     "start": 1.58,
+     "end": 1.94
+    }
+   ]
+  },
+  {
+   "id": "L2",
+   "scene": "S2",
+   "text": "Your heart will beat thirty-five times.",
+   "start": 4.25,
+   "end": 6.196,
+   "file": "vo/lines/L2_48k.wav",
+   "words": [
+    {
+     "w": "Your",
+     "start": 4.25,
+     "end": 4.39
+    },
+    {
+     "w": "heart",
+     "start": 4.39,
+     "end": 4.59
+    },
+    {
+     "w": "will",
+     "start": 4.59,
+     "end": 4.77
+    },
+    {
+     "w": "beat",
+     "start": 4.77,
+     "end": 4.95
+    },
+    {
+     "w": "35",
+     "start": 4.95,
+     "end": 5.49
+    },
+    {
+     "w": "times.",
+     "start": 5.49,
+     "end": 5.93
+    }
+   ]
+  },
+  {
+   "id": "L3",
+   "scene": "S3",
+   "text": "Your body will make seventy million new red blood cells.",
+   "start": 8.2,
+   "end": 10.88,
+   "file": "vo/lines/L3_48k.wav",
+   "words": [
+    {
+     "w": "Your",
+     "start": 8.2,
+     "end": 8.32
+    },
+    {
+     "w": "body",
+     "start": 8.32,
+     "end": 8.56
+    },
+    {
+     "w": "will",
+     "start": 8.56,
+     "end": 8.7
+    },
+    {
+     "w": "make",
+     "start": 8.7,
+     "end": 8.86
+    },
+    {
+     "w": "70",
+     "start": 8.86,
+     "end": 9.26
+    },
+    {
+     "w": "million",
+     "start": 9.26,
+     "end": 9.6
+    },
+    {
+     "w": "new",
+     "start": 9.6,
+     "end": 9.88
+    },
+    {
+     "w": "red",
+     "start": 9.88,
+     "end": 10.12
+    },
+    {
+     "w": "blood",
+     "start": 10.12,
+     "end": 10.36
+    },
+    {
+     "w": "cells.",
+     "start": 10.36,
+     "end": 10.64
+    }
+   ]
+  },
+  {
+   "id": "L4",
+   "scene": "S4",
+   "text": "About a hundred and twenty-five babies will be born.",
+   "start": 12.2,
+   "end": 14.78,
+   "file": "vo/lines/L4_48k.wav",
+   "words": [
+    {
+     "w": "about",
+     "start": 12.2,
+     "end": 12.38
+    },
+    {
+     "w": "125",
+     "start": 12.38,
+     "end": 13.32
+    },
+    {
+     "w": "babies",
+     "start": 13.32,
+     "end": 14.02
+    },
+    {
+     "w": "will",
+     "start": 14.02,
+     "end": 14.24
+    },
+    {
+     "w": "be",
+     "start": 14.24,
+     "end": 14.36
+    },
+    {
+     "w": "born.",
+     "start": 14.36,
+     "end": 14.6
+    }
+   ]
+  },
+  {
+   "id": "L5",
+   "scene": "S5",
+   "text": "Lightning will flash thirteen hundred times.",
+   "start": 16.35,
+   "end": 18.418,
+   "file": "vo/lines/L5_48k.wav",
+   "words": [
+    {
+     "w": "Lightning",
+     "start": 16.35,
+     "end": 16.65
+    },
+    {
+     "w": "will",
+     "start": 16.65,
+     "end": 16.87
+    },
+    {
+     "w": "flash",
+     "start": 16.87,
+     "end": 17.19
+    },
+    {
+     "w": "1",
+     "start": 17.19,
+     "end": 17.45
+    },
+    {
+     "w": ",300",
+     "start": 17.45,
+     "end": 17.67
+    },
+    {
+     "w": "times.",
+     "start": 17.67,
+     "end": 18.17
+    }
+   ]
+  },
+  {
+   "id": "L6",
+   "scene": "S6",
+   "text": "Earth will fly nine hundred kilometers around the Sun.",
+   "start": 20.15,
+   "end": 22.808,
+   "file": "vo/lines/L6_48k.wav",
+   "words": [
+    {
+     "w": "Earth",
+     "start": 20.15,
+     "end": 20.39
+    },
+    {
+     "w": "will",
+     "start": 20.39,
+     "end": 20.61
+    },
+    {
+     "w": "fly",
+     "start": 20.61,
+     "end": 20.87
+    },
+    {
+     "w": "900",
+     "start": 20.87,
+     "end": 21.47
+    },
+    {
+     "w": "kilometers",
+     "start": 21.47,
+     "end": 21.95
+    },
+    {
+     "w": "around",
+     "start": 21.95,
+     "end": 22.37
+    },
+    {
+     "w": "the",
+     "start": 22.37,
+     "end": 22.53
+    },
+    {
+     "w": "sun.",
+     "start": 22.53,
+     "end": 22.69
+    }
+   ]
+  },
+  {
+   "id": "L7",
+   "scene": "S7",
+   "text": "Light will circle the planet two hundred and twenty-four times.",
+   "start": 22.95,
+   "end": 26.005,
+   "file": "vo/lines/L7_48k.wav",
+   "words": [
+    {
+     "w": "Light",
+     "start": 22.95,
+     "end": 23.15
+    },
+    {
+     "w": "will",
+     "start": 23.15,
+     "end": 23.37
+    },
+    {
+     "w": "circle",
+     "start": 23.37,
+     "end": 23.65
+    },
+    {
+     "w": "the",
+     "start": 23.65,
+     "end": 23.83
+    },
+    {
+     "w": "planet",
+     "start": 23.83,
+     "end": 24.03
+    },
+    {
+     "w": "224",
+     "start": 24.03,
+     "end": 25.03
+    },
+    {
+     "w": "times.",
+     "start": 25.03,
+     "end": 25.77
+    }
+   ]
+  },
+  {
+   "id": "L8",
+   "scene": "S8",
+   "text": "All of that... while you watched this.",
+   "start": 26.25,
+   "end": 27.929,
+   "file": "vo/lines/L8_48k.wav",
+   "words": [
+    {
+     "w": "All",
+     "start": 26.25,
+     "end": 26.41
+    },
+    {
+     "w": "of",
+     "start": 26.41,
+     "end": 26.53
+    },
+    {
+     "w": "that",
+     "start": 26.53,
+     "end": 26.77
+    },
+    {
+     "w": "while",
+     "start": 26.77,
+     "end": 27.05
+    },
+    {
+     "w": "you",
+     "start": 27.05,
+     "end": 27.19
+    },
+    {
+     "w": "watch",
+     "start": 27.19,
+     "end": 27.43
+    },
+    {
+     "w": "this.",
+     "start": 27.43,
+     "end": 27.75
+    }
+   ]
+  },
+  {
+   "id": "L9",
+   "scene": "S8",
+   "text": "Make the next thirty count.",
+   "start": 28.25,
+   "end": 29.642,
+   "file": "vo/lines/L9_48k.wav",
+   "words": [
+    {
+     "w": "Make",
+     "start": 28.25,
+     "end": 28.43
+    },
+    {
+     "w": "the",
+     "start": 28.43,
+     "end": 28.57
+    },
+    {
+     "w": "next",
+     "start": 28.57,
+     "end": 28.81
+    },
+    {
+     "w": "30",
+     "start": 28.81,
+     "end": 29.11
+    },
+    {
+     "w": "count.",
+     "start": 29.11,
+     "end": 29.41
+    }
+   ]
+  }
+ ]
+}
