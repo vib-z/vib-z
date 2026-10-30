@@ -1,10 +1,6 @@
-- 👋 Hi, I’m @vib-z
-- 👀 I’m interested in AI, Langchain and new trends
-- 🌱 I’m currently learning python, langchain and how I can use these tools together.
-- 💞️ I’m looking to collaborate on Langchain apps.
-- 📫 How to reach me ...
-
-<!---
-vib-z/vib-z is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+- 👋 Hi, I'm @vib-z, a head of product with over a decade of experience.
+- 🧪 I love experimenting: new models, new tools, new ways of working.
+- 🤖 I build with agents: teams of bots that each own a job and wait for my yes before anything ships.
+- ❤️ I love orchestration, clean pixel-perfect UI, and turning skills into reusable superpowers for agents.
+- 🛠️ Open source: [stampede](https://github.com/vib-z/stampede) (text your bot, and agents on your Mac do the work) and [herdr-layouts](https://github.com/vib-z/herdr-layouts) (a calm control panel for a noisy fleet).
+- 🚀 Currently running about twenty AI assistants across my work and life.
